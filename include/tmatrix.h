@@ -27,17 +27,17 @@ public:
   {
         if (sz >= MAX_VECTOR_SIZE) throw 1;
         if (sz < 0) throw 2;
-    if (sz == 0)
-      throw out_of_range("Vector size should be greater than zero");
-    pMem = new T[sz]();// {}; // У типа T д.б. констуктор по умолчанию
+        if (sz == 0)
+            throw out_of_range("Vector size should be greater than zero");
+        pMem = new T[sz]();// {}; // У типа T д.б. констуктор по умолчанию
   }
   TDynamicVector(T* arr, size_t s) : sz(s)
   {
       if (sz >= MAX_VECTOR_SIZE) throw 1;
       if (sz < 0) throw 2;
-    assert(arr != nullptr && "TDynamicVector ctor requires non-nullptr arg");
-    pMem = new T[sz];
-    std::copy(arr, arr + sz, pMem);
+        assert(arr != nullptr && "TDynamicVector ctor requires non-nullptr arg");
+      pMem = new T[sz];
+      std::copy(arr, arr + sz, pMem);
   }
   TDynamicVector(const TDynamicVector& v)
   {
@@ -53,7 +53,7 @@ public:
   }
   ~TDynamicVector()
   {
-      delete pMem;
+      delete[] pMem;
   }
   TDynamicVector& operator=(const TDynamicVector& v)
   {
@@ -206,10 +206,9 @@ class TDynamicMatrix : private TDynamicVector<TDynamicVector<T>>
 public:
   TDynamicMatrix(size_t s = 1) : TDynamicVector<TDynamicVector<T>>(s)
   {
-      if (sz < 0) throw - 7;
-      if (sz >= MAX_MATRIX_SIZE) throw 2;
-    for (size_t i = 0; i < sz; i++)
-      pMem[i] = TDynamicVector<T>(sz);
+      if (sz >= MAX_MATRIX_SIZE) throw 1;
+      for (size_t i = 0; i < sz; i++)
+          pMem[i] = TDynamicVector<T>(sz);
   }
 
   using TDynamicVector<TDynamicVector<T>>::operator[];
@@ -271,6 +270,7 @@ public:
   }
   TDynamicMatrix operator*(const TDynamicMatrix& m)
   {
+      if (sz != m.sz) throw 10;
       TDynamicMatrix tmp(sz);
       for (size_t i = 0; i < sz; i++)
           for (size_t j = 0; j < sz; j++)

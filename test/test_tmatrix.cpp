@@ -4,7 +4,7 @@
 
 TEST(TDynamicMatrix, can_create_matrix_with_positive_length)
 {
-  ASSERT_NO_THROW(TDynamicMatrix<int> m(5));
+  ASSERT_NO_THROW(TDynamicMatrix<int> m(2));
 }
 
 TEST(TDynamicMatrix, cant_create_too_large_matrix)
@@ -72,10 +72,10 @@ TEST(TDynamicMatrix, can_set_and_get_element)
 	m[0][1] = 2;
 	m[1][0] = 3;
 	m[1][1] = 2;
-	EXPECT_NE(m[0][0], 3);
-	EXPECT_NE(m[0][1], 2);
-	EXPECT_NE(m[1][0], 3);
-	EXPECT_NE(m[1][1], 2);
+	EXPECT_EQ(m[0][0], 3);
+	EXPECT_EQ(m[0][1], 2);
+	EXPECT_EQ(m[1][0], 3);
+	EXPECT_EQ(m[1][1], 2);
 }
 
 TEST(TDynamicMatrix, throws_when_set_element_with_negative_index)
@@ -119,6 +119,7 @@ TEST(TDynamicMatrix, assign_operator_change_matrix_size)
 	m[1][0] = 3;
 	m[1][1] = 2;
 	TDynamicMatrix<int> m1(1);
+	m1 = m;
 	EXPECT_EQ(m1.size(), 2);
 }
 
