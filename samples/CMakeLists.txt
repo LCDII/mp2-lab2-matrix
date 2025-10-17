@@ -2,7 +2,7 @@ set(target "Matrix_sample")
 
 file(GLOB hdrs "*.h*")
 file(GLOB srcs "*.cpp*")
-file(GLOB matrix "${CMAKE_CURRENT_SOURCE_DIR}/tmatrix.h")
+file(GLOB matrix "${MP2_INCLUDE}/tmatrix.h")
 
 
 add_executable(${target} ${srcs} ${hdrs} ${matrix})
