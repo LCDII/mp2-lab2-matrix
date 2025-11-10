@@ -6,5 +6,3 @@ file(GLOB matrix "${MP2_INCLUDE}/tmatrix.h")
 
 
 add_executable(${target} ${srcs} ${hdrs} ${matrix})
-
-target_link_libraries(${target} ${MP2_LIBRARY})

@@ -216,7 +216,7 @@ public:
   using TDynamicVector<TDynamicVector<T>>::size;
 
 
-
+  TDynamicMatrix(const TDynamicVector<TDynamicVector<T>>& m) : TDynamicVector<TDynamicVector<T>>(m){}
 
   // сравнение
   bool operator==(const TDynamicMatrix& m) const noexcept
@@ -231,12 +231,7 @@ public:
   {
       TDynamicMatrix tmp(sz);
       for (size_t i = 0; i < sz; i++)
-      {
-          for (size_t j = 0; j < sz; j++)
-          {
-              tmp.pMem[i][j] *= val;
-          }
-      }
+          tmp.pMem[i] *= val;
       return tmp;
   }
 
@@ -247,10 +242,7 @@ public:
       TDynamicVector<T> tmp(sz);
       for (size_t i = 0; i < sz; i++)
       {     
-          for (size_t j = 0; j < sz; j++)
-          {
-              tmp.pMem[i] += pMem[i][j] * v[j];
-          }
+          tmp.pMem[i] = (*this).pMem[i] * v;
       }
       return tmp;
   }
@@ -258,23 +250,19 @@ public:
   // матрично-матричные операции
   TDynamicMatrix operator+(const TDynamicMatrix& m)
   {
-      TDynamicMatrix tmp(sz);
-      for (size_t i = 0; i < sz; i++) tmp.pMem[i] = pMem[i] + m.pMem[i];
-      return tmp;
+      return TDynamicVector<TDynamicVector<T>>::operator+(m);
   }
   TDynamicMatrix operator-(const TDynamicMatrix& m)
   {
-      TDynamicMatrix tmp(sz);
-      for (size_t i = 0; i < sz; i++) tmp.pMem[i] = pMem[i] - m.pMem[i];
-      return tmp;
+      return TDynamicVector<TDynamicVector<T>>::operator-(m);
   }
   TDynamicMatrix operator*(const TDynamicMatrix& m)
   {
+      //использовать предыдущие операции можно, только если сначала транспонировать m
       if (sz != m.sz) throw 10;
       TDynamicMatrix tmp(sz);
       for (size_t i = 0; i < sz; i++)
-          for (size_t j = 0; j < sz; j++)
-              for (size_t k = 0; k < sz; k++) tmp.pMem[i][j] += pMem[i][k] * m.pMem[k][j];
+          tmp.pMem[i] = (*this) * m.pMem[i]
       return tmp;
   }
 
@@ -282,21 +270,14 @@ public:
   friend istream& operator>>(istream& istr, TDynamicMatrix& v)
   {
       for (size_t i = 0; i < v.sz; i++)
-          for (size_t j = 0; j < sz; j++)
-            istr >> v.pMem[i][j]; // требуется оператор>> для типа T
+            istr >> v.pMem[i]; // требуется оператор>> для типа T
       return istr;
       
   }
   friend ostream& operator<<(ostream& ostr, const TDynamicMatrix& v)
   {
       for (size_t i = 0; i < v.sz; i++)
-      {
-          for (size_t j = 0; j < v.sz; j++)
-          {
-              std::cout << v.pMem[i][j] << " ";
-          }
-          std::cout << std::endl;
-      }
+            std::cout << v.pMem[i] << endl;
       return ostr;
   }
 };
